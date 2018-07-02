@@ -1,4 +1,5 @@
 class SongsController < ApplicationController
+
   def index
     @songs = Song.all
   end
@@ -12,7 +13,9 @@ class SongsController < ApplicationController
   end
 
   def create
+    # byebug
     @song = Song.new(song_params)
+    make_notes
 
     if @song.save
       redirect_to @song
@@ -47,7 +50,15 @@ class SongsController < ApplicationController
   private
 
   def song_params
-    params.require(:song).permit(:title)
+    params.require(:song).permit(:title, :artist_name, :genre_id, notes: [])
+  end
+
+  def make_notes
+    if params[:notes].any? { |note| note != ""}
+      params[:notes].delete("")
+      params[:notes].each do |note|
+        @song.notes << Note.create(content: note)
+      end
+    end
   end
 end
-
