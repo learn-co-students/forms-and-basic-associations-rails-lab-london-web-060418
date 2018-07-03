@@ -3,7 +3,7 @@ class Genre < ActiveRecord::Base
 
   def song_ids=(ids)
      ids.each do |id|
-       post = Song.find(id)
+       song = Song.find(id)
        self.songs << song
      end
    end
